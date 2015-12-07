@@ -1,7 +1,5 @@
 package day1;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -11,8 +9,21 @@ public class FloorFinder {
     private final static char goUpChar = '(';
     private final static char goDownChar = ')';
 
-    public static int getFloor(String instructions, int startingFloor) {
-        return startingFloor + StringUtils.countMatches(instructions, goUpChar) - StringUtils.countMatches(instructions, goDownChar);
+    public static int getBasementCharacterPosition(String instructions, int startingFloor) {
+        int characterPosition = -1;
+        int currentFloor = startingFloor;
+        for (int i = 0; i < instructions.length() && characterPosition == -1; i++) {
+            char currentChar = instructions.charAt(i);
+            if (goUpChar == currentChar) {
+                currentFloor++;
+            } else if (goDownChar == currentChar) {
+                currentFloor--;
+            }
+            if (currentFloor == -1) {
+                characterPosition = i + 1;
+            }
+        }
+        return characterPosition;
     }
 
     public static void main(String[] args) {
@@ -24,8 +35,8 @@ public class FloorFinder {
             while ((currentLine = bufferedReader.readLine()) != null) {
                 instructions.append(currentLine);
             }
-            int floor = FloorFinder.getFloor(instructions.toString(), startingFloor);
-            System.out.println(String.format("Floor : %d", floor));
+            int basementCharacterPosition = FloorFinder.getBasementCharacterPosition(instructions.toString(), startingFloor);
+            System.out.println(String.format("Position : %d", basementCharacterPosition));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
