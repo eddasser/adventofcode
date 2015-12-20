@@ -1,9 +1,6 @@
 package day1;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import common.MyFileReader;
 
 public class FloorFinder {
     private final static char goUpChar = '(';
@@ -27,20 +24,9 @@ public class FloorFinder {
     }
 
     public static void main(String[] args) {
-        try {
-            int startingFloor = 0;
-            StringBuilder instructions = new StringBuilder();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(FloorFinder.class.getClassLoader().getResourceAsStream("day1/puzzle.txt")));
-            String currentLine;
-            while ((currentLine = bufferedReader.readLine()) != null) {
-                instructions.append(currentLine);
-            }
-            int basementCharacterPosition = FloorFinder.getBasementCharacterPosition(instructions.toString(), startingFloor);
-            System.out.println(String.format("Position : %d", basementCharacterPosition));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        int startingFloor = 0;
+        String instructions = MyFileReader.getContentAsString("day1/puzzle.txt");
+        int basementCharacterPosition = FloorFinder.getBasementCharacterPosition(instructions, startingFloor);
+        System.out.println(String.format("Position : %d", basementCharacterPosition));
     }
 }
