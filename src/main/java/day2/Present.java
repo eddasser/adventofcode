@@ -20,21 +20,49 @@ public class Present {
     }
 
     public double getRequiredWrappingPaper() {
-        return getDimension() + Math.min(length * width, Math.min(width * height, length * height)
-        );
+        return getDimension() + getMinSide() * getSecondMinSide();
+    }
+
+    public double getMinSide() {
+        return Math.min(length, Math.min(width, height));
+    }
+
+    public double getSecondMinSide() {
+        double minDimension = getMinSide();
+        if (minDimension == length) {
+            return Math.min(width, height);
+        } else if (minDimension == width) {
+            return Math.min(length, height);
+        } else {
+            return Math.min(length, width);
+        }
+    }
+
+    public double getRibbonToWrapLength() {
+        return 2 * getMinSide() + 2 * getSecondMinSide();
+    }
+
+    public double getRibbonForBowLength() {
+        return length * width * height;
+    }
+
+    public double getRequiredRibbonLength() {
+        return getRibbonToWrapLength() + getRibbonForBowLength();
     }
 
     public static void main(String[] args) {
         List<String> presents = MyFileReader.getContentAsStringList("day2/presents.txt");
-        double total = 0;
+        double totalWrappingPaper = 0;
+        double totalRibbon = 0;
         for (String p : presents) {
             String[] dimension = p.split("x");
-
             Present present = new Present(Double.parseDouble(dimension[0]), Double.parseDouble(dimension[1]), Double.parseDouble(dimension[2]));
-            Double needed = present.getRequiredWrappingPaper();
-            total += needed;
-            System.out.println("PRESNET : " + p + " = " + needed);
+            double wrappingPaperNeeded = present.getRequiredWrappingPaper();
+            double ribbonNeeded = present.getRequiredRibbonLength();
+            totalWrappingPaper += wrappingPaperNeeded;
+            totalRibbon += ribbonNeeded;
         }
-        System.out.println("Total : " + total);
+        System.out.println("Total Wrapping Paper : " + totalWrappingPaper);
+        System.out.println("Total Ribbon : " + totalRibbon);
     }
 }
